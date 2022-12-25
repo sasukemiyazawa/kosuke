@@ -1,0 +1,567 @@
+Started GET "/" for ::1 at 2022-12-25 23:22:50 +0900
+  [1m[35m (1.8ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActiveRecord::PendingMigrationError (
+
+Migrations are pending. To resolve this issue, run:
+
+        rails db:migrate RAILS_ENV=development
+
+):
+  
+activerecord (6.0.6) lib/active_record/migration.rb:586:in `check_pending!'
+activerecord (6.0.6) lib/active_record/migration.rb:564:in `call'
+actionpack (6.0.6) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.0.6) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (6.0.6) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.0.6) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.6) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (6.0.6) lib/action_dispatch/middleware/debug_exceptions.rb:32:in `call'
+actionpack (6.0.6) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.6) lib/rails/rack/logger.rb:37:in `call_app'
+railties (6.0.6) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.6) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.6) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.6) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.6) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.0.6) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.6) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.4) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.6) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.6) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.6) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.4) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.6) lib/action_dispatch/middleware/host_authorization.rb:103:in `call'
+rack-cors (1.1.1) lib/rack/cors.rb:100:in `call'
+railties (6.0.6) lib/rails/engine.rb:527:in `call'
+puma (4.3.12) lib/puma/configuration.rb:228:in `call'
+puma (4.3.12) lib/puma/server.rb:727:in `handle_request'
+puma (4.3.12) lib/puma/server.rb:476:in `process_client'
+puma (4.3.12) lib/puma/server.rb:332:in `block in run'
+puma (4.3.12) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to RenameIsSafeColumnToPickupPosts (20221118112348)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aposts" ("id" integer NOT NULL PRIMARY KEY, "nickname" varchar DEFAULT NULL, "titles" varchar DEFAULT NULL, "comments" varchar DEFAULT NULL, "pickup" boolean DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "likeCounts" integer DEFAULT NULL)[0m
+  [1m[35m (0.3ms)[0m  [1m[32mINSERT INTO "aposts" ("id","nickname","titles","comments","pickup","created_at","updated_at","likeCounts")
+                     SELECT "id","nickname","titles","comments","isSafe","created_at","updated_at","likeCounts" FROM "posts"[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE "posts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer NOT NULL PRIMARY KEY, "nickname" varchar DEFAULT NULL, "titles" varchar DEFAULT NULL, "comments" varchar DEFAULT NULL, "pickup" boolean DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "likeCounts" integer DEFAULT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "posts" ("id","nickname","titles","comments","pickup","created_at","updated_at","likeCounts")
+                     SELECT "id","nickname","titles","comments","pickup","created_at","updated_at","likeCounts" FROM "aposts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "aposts"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20221118112348"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.4ms)[0m  [1m[32mINSERT INTO "posts" ("nickname", "titles", "comments", "pickup", "created_at", "updated_at", "likeCounts") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["nickname", "テスト1君"], ["titles", "テスト1"], ["comments", "テスト1だよ"], ["pickup", 0], ["created_at", "2022-12-25 14:23:18.463175"], ["updated_at", "2022-12-25 14:23:18.463175"], ["likeCounts", 80]]
+  [1m[35m (0.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 11], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.1ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 11], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "7rc2xi3tfbotd5t0z9c0q6bc0vcj"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:18.511060"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "images"], ["record_type", "Post"], ["record_id", 11], ["blob_id", 10], ["created_at", "2022-12-25 14:23:18.512293"]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:18.513063"], ["id", 11]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.9ms) [0m[32mUploaded file to key: 7rc2xi3tfbotd5t0z9c0q6bc0vcj (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 10], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [d2cfc1b7-4328-47bc-bd12-b1835719bc0d] Performing ActiveStorage::AnalyzeJob (Job ID: d2cfc1b7-4328-47bc-bd12-b1835719bc0d) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:18Z with arguments: #<GlobalID:0x000000012b360f70 @uri=#<URI::GID gid://app/ActiveStorage::Blob/10>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [d2cfc1b7-4328-47bc-bd12-b1835719bc0d] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: 7rc2xi3tfbotd5t0z9c0q6bc0vcj[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [d2cfc1b7-4328-47bc-bd12-b1835719bc0d] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [d2cfc1b7-4328-47bc-bd12-b1835719bc0d]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [d2cfc1b7-4328-47bc-bd12-b1835719bc0d]   [1m[36mActiveStorage::Blob Update (0.3ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 10]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [d2cfc1b7-4328-47bc-bd12-b1835719bc0d]   [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [d2cfc1b7-4328-47bc-bd12-b1835719bc0d] Performed ActiveStorage::AnalyzeJob (Job ID: d2cfc1b7-4328-47bc-bd12-b1835719bc0d) from Inline(active_storage_analysis) in 816.61ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: d2cfc1b7-4328-47bc-bd12-b1835719bc0d) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011d334078 @uri=#<URI::GID gid://app/ActiveStorage::Blob/10>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (0.3ms)[0m  [1m[32mINSERT INTO "events" ("eventname", "contents", "term", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["eventname", "テストイベント1"], ["contents", "テスト1です"], ["term", "2022-12-26"], ["created_at", "2022-12-25 14:23:19.355909"], ["updated_at", "2022-12-25 14:23:19.355909"]]
+  [1m[35m (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTag Load (0.1ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ1"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ1"], ["LIMIT", 1]]
+  [1m[36mTag Create (0.2ms)[0m  [1m[32mINSERT INTO "tags" ("tagname", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["tagname", "タグ1"], ["created_at", "2022-12-25 14:23:19.367021"], ["updated_at", "2022-12-25 14:23:19.367021"]]
+  [1m[35m (0.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? AND "tags"."id" != ? LIMIT ?[0m  [["tagname", "タグ1"], ["id", 4], ["LIMIT", 1]]
+  [1m[36mTag Update (0.2ms)[0m  [1m[33mUPDATE "tags" SET "updated_at" = ?, "event_id" = ? WHERE "tags"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.370520"], ["event_id", 1], ["id", 4]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "8jvaotsxh6bfopfxbgqg6bai5fmp"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.374823"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "image"], ["record_type", "Event"], ["record_id", 1], ["blob_id", 11], ["created_at", "2022-12-25 14:23:19.375811"]]
+  [1m[36mEvent Update (0.0ms)[0m  [1m[33mUPDATE "events" SET "updated_at" = ? WHERE "events"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.376489"], ["id", 1]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.8ms) [0m[32mUploaded file to key: 8jvaotsxh6bfopfxbgqg6bai5fmp (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 11], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [6b6c8909-001f-4bdb-9fa9-238ad6492a21] Performing ActiveStorage::AnalyzeJob (Job ID: 6b6c8909-001f-4bdb-9fa9-238ad6492a21) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000011d160508 @uri=#<URI::GID gid://app/ActiveStorage::Blob/11>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [6b6c8909-001f-4bdb-9fa9-238ad6492a21] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: 8jvaotsxh6bfopfxbgqg6bai5fmp[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [6b6c8909-001f-4bdb-9fa9-238ad6492a21] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [6b6c8909-001f-4bdb-9fa9-238ad6492a21]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [6b6c8909-001f-4bdb-9fa9-238ad6492a21]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 11]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [6b6c8909-001f-4bdb-9fa9-238ad6492a21]   [1m[35m (0.7ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [6b6c8909-001f-4bdb-9fa9-238ad6492a21] Performed ActiveStorage::AnalyzeJob (Job ID: 6b6c8909-001f-4bdb-9fa9-238ad6492a21) from Inline(active_storage_analysis) in 4.48ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 6b6c8909-001f-4bdb-9fa9-238ad6492a21) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011c35ab20 @uri=#<URI::GID gid://app/ActiveStorage::Blob/11>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("nickname", "titles", "comments", "pickup", "created_at", "updated_at", "likeCounts") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["nickname", "テスト2君"], ["titles", "テスト2"], ["comments", "テスト2だよ"], ["pickup", 0], ["created_at", "2022-12-25 14:23:19.384836"], ["updated_at", "2022-12-25 14:23:19.384836"], ["likeCounts", 18]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 12], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 12], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "bba150gz9mqw6kztnjyjpppvgdp7"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.389214"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "images"], ["record_type", "Post"], ["record_id", 12], ["blob_id", 12], ["created_at", "2022-12-25 14:23:19.390236"]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.390920"], ["id", 12]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.6ms) [0m[32mUploaded file to key: bba150gz9mqw6kztnjyjpppvgdp7 (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [63203647-fc22-4a66-b4dd-7375e051fbc6] Performing ActiveStorage::AnalyzeJob (Job ID: 63203647-fc22-4a66-b4dd-7375e051fbc6) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000011ca26148 @uri=#<URI::GID gid://app/ActiveStorage::Blob/12>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [63203647-fc22-4a66-b4dd-7375e051fbc6] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: bba150gz9mqw6kztnjyjpppvgdp7[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [63203647-fc22-4a66-b4dd-7375e051fbc6] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [63203647-fc22-4a66-b4dd-7375e051fbc6]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [63203647-fc22-4a66-b4dd-7375e051fbc6]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 12]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [63203647-fc22-4a66-b4dd-7375e051fbc6]   [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [63203647-fc22-4a66-b4dd-7375e051fbc6] Performed ActiveStorage::AnalyzeJob (Job ID: 63203647-fc22-4a66-b4dd-7375e051fbc6) from Inline(active_storage_analysis) in 3.94ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 63203647-fc22-4a66-b4dd-7375e051fbc6) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011c8f71f0 @uri=#<URI::GID gid://app/ActiveStorage::Blob/12>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (0.2ms)[0m  [1m[32mINSERT INTO "events" ("eventname", "contents", "term", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["eventname", "テストイベント2"], ["contents", "テスト2です"], ["term", "2022-12-26"], ["created_at", "2022-12-25 14:23:19.398352"], ["updated_at", "2022-12-25 14:23:19.398352"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTag Load (0.0ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ2"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ2"], ["LIMIT", 1]]
+  [1m[36mTag Create (0.2ms)[0m  [1m[32mINSERT INTO "tags" ("tagname", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["tagname", "タグ2"], ["created_at", "2022-12-25 14:23:19.402053"], ["updated_at", "2022-12-25 14:23:19.402053"]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? AND "tags"."id" != ? LIMIT ?[0m  [["tagname", "タグ2"], ["id", 5], ["LIMIT", 1]]
+  [1m[36mTag Update (0.2ms)[0m  [1m[33mUPDATE "tags" SET "updated_at" = ?, "event_id" = ? WHERE "tags"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.404925"], ["event_id", 2], ["id", 5]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "qrye5li7dw80thrv0sdpsakhmdcx"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.409040"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "image"], ["record_type", "Event"], ["record_id", 2], ["blob_id", 13], ["created_at", "2022-12-25 14:23:19.410056"]]
+  [1m[36mEvent Update (0.0ms)[0m  [1m[33mUPDATE "events" SET "updated_at" = ? WHERE "events"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.410789"], ["id", 2]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.6ms) [0m[32mUploaded file to key: qrye5li7dw80thrv0sdpsakhmdcx (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 13], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b567302f-7328-4cf5-8812-56c9c3cb0ceb] Performing ActiveStorage::AnalyzeJob (Job ID: b567302f-7328-4cf5-8812-56c9c3cb0ceb) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000012b53f3c8 @uri=#<URI::GID gid://app/ActiveStorage::Blob/13>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b567302f-7328-4cf5-8812-56c9c3cb0ceb] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: qrye5li7dw80thrv0sdpsakhmdcx[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b567302f-7328-4cf5-8812-56c9c3cb0ceb] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b567302f-7328-4cf5-8812-56c9c3cb0ceb]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b567302f-7328-4cf5-8812-56c9c3cb0ceb]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 13]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b567302f-7328-4cf5-8812-56c9c3cb0ceb]   [1m[35m (2.5ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b567302f-7328-4cf5-8812-56c9c3cb0ceb] Performed ActiveStorage::AnalyzeJob (Job ID: b567302f-7328-4cf5-8812-56c9c3cb0ceb) from Inline(active_storage_analysis) in 8.19ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: b567302f-7328-4cf5-8812-56c9c3cb0ceb) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011da5d660 @uri=#<URI::GID gid://app/ActiveStorage::Blob/13>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.3ms)[0m  [1m[32mINSERT INTO "posts" ("nickname", "titles", "comments", "pickup", "created_at", "updated_at", "likeCounts") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["nickname", "テスト3君"], ["titles", "テスト3"], ["comments", "テスト3だよ"], ["pickup", 0], ["created_at", "2022-12-25 14:23:19.422432"], ["updated_at", "2022-12-25 14:23:19.422432"], ["likeCounts", 99]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 13], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 13], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "ejrth4gqf3ipr0oh9e9epvb5wwa8"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.427873"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "images"], ["record_type", "Post"], ["record_id", 13], ["blob_id", 14], ["created_at", "2022-12-25 14:23:19.428883"]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.429558"], ["id", 13]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: ejrth4gqf3ipr0oh9e9epvb5wwa8 (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 14], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [df881689-52de-471a-9531-f49556df1b14] Performing ActiveStorage::AnalyzeJob (Job ID: df881689-52de-471a-9531-f49556df1b14) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000012a6d82a8 @uri=#<URI::GID gid://app/ActiveStorage::Blob/14>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [df881689-52de-471a-9531-f49556df1b14] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: ejrth4gqf3ipr0oh9e9epvb5wwa8[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [df881689-52de-471a-9531-f49556df1b14] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [df881689-52de-471a-9531-f49556df1b14]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [df881689-52de-471a-9531-f49556df1b14]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 14]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [df881689-52de-471a-9531-f49556df1b14]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [df881689-52de-471a-9531-f49556df1b14] Performed ActiveStorage::AnalyzeJob (Job ID: df881689-52de-471a-9531-f49556df1b14) from Inline(active_storage_analysis) in 4.23ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: df881689-52de-471a-9531-f49556df1b14) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000012a65bb68 @uri=#<URI::GID gid://app/ActiveStorage::Blob/14>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (0.2ms)[0m  [1m[32mINSERT INTO "events" ("eventname", "contents", "term", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["eventname", "テストイベント3"], ["contents", "テスト3です"], ["term", "2022-12-26"], ["created_at", "2022-12-25 14:23:19.437300"], ["updated_at", "2022-12-25 14:23:19.437300"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTag Load (0.0ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ3"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ3"], ["LIMIT", 1]]
+  [1m[36mTag Create (0.2ms)[0m  [1m[32mINSERT INTO "tags" ("tagname", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["tagname", "タグ3"], ["created_at", "2022-12-25 14:23:19.441144"], ["updated_at", "2022-12-25 14:23:19.441144"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? AND "tags"."id" != ? LIMIT ?[0m  [["tagname", "タグ3"], ["id", 6], ["LIMIT", 1]]
+  [1m[36mTag Update (0.2ms)[0m  [1m[33mUPDATE "tags" SET "updated_at" = ?, "event_id" = ? WHERE "tags"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.443981"], ["event_id", 3], ["id", 6]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 3], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 3], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "8kwymi2p7a0veymo04gsnvzyo15n"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.448276"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "image"], ["record_type", "Event"], ["record_id", 3], ["blob_id", 15], ["created_at", "2022-12-25 14:23:19.449400"]]
+  [1m[36mEvent Update (0.0ms)[0m  [1m[33mUPDATE "events" SET "updated_at" = ? WHERE "events"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.450095"], ["id", 3]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (2.6ms) [0m[32mUploaded file to key: 8kwymi2p7a0veymo04gsnvzyo15n (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 15], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [c6254b83-0c91-4536-b17c-6d49dfc1728d] Performing ActiveStorage::AnalyzeJob (Job ID: c6254b83-0c91-4536-b17c-6d49dfc1728d) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000012a364b58 @uri=#<URI::GID gid://app/ActiveStorage::Blob/15>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [c6254b83-0c91-4536-b17c-6d49dfc1728d] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: 8kwymi2p7a0veymo04gsnvzyo15n[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [c6254b83-0c91-4536-b17c-6d49dfc1728d] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [c6254b83-0c91-4536-b17c-6d49dfc1728d]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [c6254b83-0c91-4536-b17c-6d49dfc1728d]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 15]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [c6254b83-0c91-4536-b17c-6d49dfc1728d]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [c6254b83-0c91-4536-b17c-6d49dfc1728d] Performed ActiveStorage::AnalyzeJob (Job ID: c6254b83-0c91-4536-b17c-6d49dfc1728d) from Inline(active_storage_analysis) in 4.35ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: c6254b83-0c91-4536-b17c-6d49dfc1728d) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011d3d59f0 @uri=#<URI::GID gid://app/ActiveStorage::Blob/15>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("nickname", "titles", "comments", "pickup", "created_at", "updated_at", "likeCounts") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["nickname", "テスト4君"], ["titles", "テスト4"], ["comments", "テスト4だよ"], ["pickup", 0], ["created_at", "2022-12-25 14:23:19.460253"], ["updated_at", "2022-12-25 14:23:19.460253"], ["likeCounts", 3]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 14], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 14], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (1.6ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "129uu9yaeiunj80t4ovq1yzj77ls"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.464893"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "images"], ["record_type", "Post"], ["record_id", 14], ["blob_id", 16], ["created_at", "2022-12-25 14:23:19.467392"]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.468153"], ["id", 14]]
+  [1m[35m (0.6ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (1.3ms) [0m[32mUploaded file to key: 129uu9yaeiunj80t4ovq1yzj77ls (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 16], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dec5db35-bafa-4d2d-8f5b-5c2056fe0733] Performing ActiveStorage::AnalyzeJob (Job ID: dec5db35-bafa-4d2d-8f5b-5c2056fe0733) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000011d3369e0 @uri=#<URI::GID gid://app/ActiveStorage::Blob/16>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dec5db35-bafa-4d2d-8f5b-5c2056fe0733] [36m  Disk Storage (0.2ms) [0m[34mDownloaded file from key: 129uu9yaeiunj80t4ovq1yzj77ls[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dec5db35-bafa-4d2d-8f5b-5c2056fe0733] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dec5db35-bafa-4d2d-8f5b-5c2056fe0733]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dec5db35-bafa-4d2d-8f5b-5c2056fe0733]   [1m[36mActiveStorage::Blob Update (0.5ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 16]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dec5db35-bafa-4d2d-8f5b-5c2056fe0733]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dec5db35-bafa-4d2d-8f5b-5c2056fe0733] Performed ActiveStorage::AnalyzeJob (Job ID: dec5db35-bafa-4d2d-8f5b-5c2056fe0733) from Inline(active_storage_analysis) in 5.67ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: dec5db35-bafa-4d2d-8f5b-5c2056fe0733) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011d2c3148 @uri=#<URI::GID gid://app/ActiveStorage::Blob/16>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (0.2ms)[0m  [1m[32mINSERT INTO "events" ("eventname", "contents", "term", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["eventname", "テストイベント4"], ["contents", "テスト4です"], ["term", "2022-12-26"], ["created_at", "2022-12-25 14:23:19.478442"], ["updated_at", "2022-12-25 14:23:19.478442"]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTag Load (0.0ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ4"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ4"], ["LIMIT", 1]]
+  [1m[36mTag Create (0.2ms)[0m  [1m[32mINSERT INTO "tags" ("tagname", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["tagname", "タグ4"], ["created_at", "2022-12-25 14:23:19.482269"], ["updated_at", "2022-12-25 14:23:19.482269"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? AND "tags"."id" != ? LIMIT ?[0m  [["tagname", "タグ4"], ["id", 7], ["LIMIT", 1]]
+  [1m[36mTag Update (0.2ms)[0m  [1m[33mUPDATE "tags" SET "updated_at" = ?, "event_id" = ? WHERE "tags"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.485162"], ["event_id", 4], ["id", 7]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 4], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 4], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "di7382y0hlloqgy1rnq5vqpdlhjv"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.489352"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "image"], ["record_type", "Event"], ["record_id", 4], ["blob_id", 17], ["created_at", "2022-12-25 14:23:19.490350"]]
+  [1m[36mEvent Update (0.0ms)[0m  [1m[33mUPDATE "events" SET "updated_at" = ? WHERE "events"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.491016"], ["id", 4]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: di7382y0hlloqgy1rnq5vqpdlhjv (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 17], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [8cf6face-175f-4a30-9b25-ef15aceafae0] Performing ActiveStorage::AnalyzeJob (Job ID: 8cf6face-175f-4a30-9b25-ef15aceafae0) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000012a246708 @uri=#<URI::GID gid://app/ActiveStorage::Blob/17>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [8cf6face-175f-4a30-9b25-ef15aceafae0] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: di7382y0hlloqgy1rnq5vqpdlhjv[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [8cf6face-175f-4a30-9b25-ef15aceafae0] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [8cf6face-175f-4a30-9b25-ef15aceafae0]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [8cf6face-175f-4a30-9b25-ef15aceafae0]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 17]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [8cf6face-175f-4a30-9b25-ef15aceafae0]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [8cf6face-175f-4a30-9b25-ef15aceafae0] Performed ActiveStorage::AnalyzeJob (Job ID: 8cf6face-175f-4a30-9b25-ef15aceafae0) from Inline(active_storage_analysis) in 4.06ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 8cf6face-175f-4a30-9b25-ef15aceafae0) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011d1234c8 @uri=#<URI::GID gid://app/ActiveStorage::Blob/17>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("nickname", "titles", "comments", "pickup", "created_at", "updated_at", "likeCounts") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["nickname", "テスト5君"], ["titles", "テスト5"], ["comments", "テスト5だよ"], ["pickup", 0], ["created_at", "2022-12-25 14:23:19.498456"], ["updated_at", "2022-12-25 14:23:19.498456"], ["likeCounts", 16]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 15], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 15], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "xo5u1ogd6xa9kq9j04d76lnl997v"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.503103"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "images"], ["record_type", "Post"], ["record_id", 15], ["blob_id", 18], ["created_at", "2022-12-25 14:23:19.504216"]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.504942"], ["id", 15]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.6ms) [0m[32mUploaded file to key: xo5u1ogd6xa9kq9j04d76lnl997v (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 18], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [cd0f9a4f-2df1-4a66-95e1-8835fa01b4cf] Performing ActiveStorage::AnalyzeJob (Job ID: cd0f9a4f-2df1-4a66-95e1-8835fa01b4cf) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000011ca84590 @uri=#<URI::GID gid://app/ActiveStorage::Blob/18>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [cd0f9a4f-2df1-4a66-95e1-8835fa01b4cf] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: xo5u1ogd6xa9kq9j04d76lnl997v[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [cd0f9a4f-2df1-4a66-95e1-8835fa01b4cf] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [cd0f9a4f-2df1-4a66-95e1-8835fa01b4cf]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [cd0f9a4f-2df1-4a66-95e1-8835fa01b4cf]   [1m[36mActiveStorage::Blob Update (0.3ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 18]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [cd0f9a4f-2df1-4a66-95e1-8835fa01b4cf]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [cd0f9a4f-2df1-4a66-95e1-8835fa01b4cf] Performed ActiveStorage::AnalyzeJob (Job ID: cd0f9a4f-2df1-4a66-95e1-8835fa01b4cf) from Inline(active_storage_analysis) in 4.27ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: cd0f9a4f-2df1-4a66-95e1-8835fa01b4cf) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011c9545d0 @uri=#<URI::GID gid://app/ActiveStorage::Blob/18>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (0.2ms)[0m  [1m[32mINSERT INTO "events" ("eventname", "contents", "term", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["eventname", "テストイベント5"], ["contents", "テスト5です"], ["term", "2022-12-26"], ["created_at", "2022-12-25 14:23:19.512901"], ["updated_at", "2022-12-25 14:23:19.512901"]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTag Load (0.0ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ5"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ5"], ["LIMIT", 1]]
+  [1m[36mTag Create (0.2ms)[0m  [1m[32mINSERT INTO "tags" ("tagname", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["tagname", "タグ5"], ["created_at", "2022-12-25 14:23:19.516706"], ["updated_at", "2022-12-25 14:23:19.516706"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? AND "tags"."id" != ? LIMIT ?[0m  [["tagname", "タグ5"], ["id", 8], ["LIMIT", 1]]
+  [1m[36mTag Update (0.2ms)[0m  [1m[33mUPDATE "tags" SET "updated_at" = ?, "event_id" = ? WHERE "tags"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.519654"], ["event_id", 5], ["id", 8]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 5], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 5], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "zot9xhhj3d75dlo6l815rtupvuz9"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.523770"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "image"], ["record_type", "Event"], ["record_id", 5], ["blob_id", 19], ["created_at", "2022-12-25 14:23:19.524767"]]
+  [1m[36mEvent Update (0.0ms)[0m  [1m[33mUPDATE "events" SET "updated_at" = ? WHERE "events"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.525443"], ["id", 5]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.6ms) [0m[32mUploaded file to key: zot9xhhj3d75dlo6l815rtupvuz9 (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 19], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [4c3558e1-98ee-4ca2-af56-3853f70f078a] Performing ActiveStorage::AnalyzeJob (Job ID: 4c3558e1-98ee-4ca2-af56-3853f70f078a) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000012b5bff00 @uri=#<URI::GID gid://app/ActiveStorage::Blob/19>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [4c3558e1-98ee-4ca2-af56-3853f70f078a] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: zot9xhhj3d75dlo6l815rtupvuz9[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [4c3558e1-98ee-4ca2-af56-3853f70f078a] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [4c3558e1-98ee-4ca2-af56-3853f70f078a]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [4c3558e1-98ee-4ca2-af56-3853f70f078a]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 19]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [4c3558e1-98ee-4ca2-af56-3853f70f078a]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [4c3558e1-98ee-4ca2-af56-3853f70f078a] Performed ActiveStorage::AnalyzeJob (Job ID: 4c3558e1-98ee-4ca2-af56-3853f70f078a) from Inline(active_storage_analysis) in 3.92ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 4c3558e1-98ee-4ca2-af56-3853f70f078a) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000012b3d2b20 @uri=#<URI::GID gid://app/ActiveStorage::Blob/19>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("nickname", "titles", "comments", "pickup", "created_at", "updated_at", "likeCounts") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["nickname", "テスト6君"], ["titles", "テスト6"], ["comments", "テスト6だよ"], ["pickup", 0], ["created_at", "2022-12-25 14:23:19.532870"], ["updated_at", "2022-12-25 14:23:19.532870"], ["likeCounts", 7]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 16], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 16], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "l7hm4j27rd0tj6mww9qixjn2eipw"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.538460"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "images"], ["record_type", "Post"], ["record_id", 16], ["blob_id", 20], ["created_at", "2022-12-25 14:23:19.539461"]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.540137"], ["id", 16]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.6ms) [0m[32mUploaded file to key: l7hm4j27rd0tj6mww9qixjn2eipw (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 20], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [7607332d-5595-4c9b-bbe6-24da07eee28b] Performing ActiveStorage::AnalyzeJob (Job ID: 7607332d-5595-4c9b-bbe6-24da07eee28b) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000012a7128e0 @uri=#<URI::GID gid://app/ActiveStorage::Blob/20>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [7607332d-5595-4c9b-bbe6-24da07eee28b] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: l7hm4j27rd0tj6mww9qixjn2eipw[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [7607332d-5595-4c9b-bbe6-24da07eee28b] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [7607332d-5595-4c9b-bbe6-24da07eee28b]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [7607332d-5595-4c9b-bbe6-24da07eee28b]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 20]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [7607332d-5595-4c9b-bbe6-24da07eee28b]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [7607332d-5595-4c9b-bbe6-24da07eee28b] Performed ActiveStorage::AnalyzeJob (Job ID: 7607332d-5595-4c9b-bbe6-24da07eee28b) from Inline(active_storage_analysis) in 3.9ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 7607332d-5595-4c9b-bbe6-24da07eee28b) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000012a69a0c0 @uri=#<URI::GID gid://app/ActiveStorage::Blob/20>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (0.2ms)[0m  [1m[32mINSERT INTO "events" ("eventname", "contents", "term", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["eventname", "テストイベント6"], ["contents", "テスト6です"], ["term", "2022-12-26"], ["created_at", "2022-12-25 14:23:19.547464"], ["updated_at", "2022-12-25 14:23:19.547464"]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTag Load (0.0ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ6"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ6"], ["LIMIT", 1]]
+  [1m[36mTag Create (0.2ms)[0m  [1m[32mINSERT INTO "tags" ("tagname", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["tagname", "タグ6"], ["created_at", "2022-12-25 14:23:19.551131"], ["updated_at", "2022-12-25 14:23:19.551131"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? AND "tags"."id" != ? LIMIT ?[0m  [["tagname", "タグ6"], ["id", 9], ["LIMIT", 1]]
+  [1m[36mTag Update (0.2ms)[0m  [1m[33mUPDATE "tags" SET "updated_at" = ?, "event_id" = ? WHERE "tags"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.553996"], ["event_id", 6], ["id", 9]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 6], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 6], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "c0eqkiq7epnhipev1q9hwgeljbnc"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.560143"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "image"], ["record_type", "Event"], ["record_id", 6], ["blob_id", 21], ["created_at", "2022-12-25 14:23:19.561082"]]
+  [1m[36mEvent Update (0.0ms)[0m  [1m[33mUPDATE "events" SET "updated_at" = ? WHERE "events"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.561722"], ["id", 6]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: c0eqkiq7epnhipev1q9hwgeljbnc (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 21], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [bb1f6d36-3ff1-483a-8894-73c88ec29598] Performing ActiveStorage::AnalyzeJob (Job ID: bb1f6d36-3ff1-483a-8894-73c88ec29598) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000012a385d08 @uri=#<URI::GID gid://app/ActiveStorage::Blob/21>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [bb1f6d36-3ff1-483a-8894-73c88ec29598] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: c0eqkiq7epnhipev1q9hwgeljbnc[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [bb1f6d36-3ff1-483a-8894-73c88ec29598] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [bb1f6d36-3ff1-483a-8894-73c88ec29598]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [bb1f6d36-3ff1-483a-8894-73c88ec29598]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 21]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [bb1f6d36-3ff1-483a-8894-73c88ec29598]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [bb1f6d36-3ff1-483a-8894-73c88ec29598] Performed ActiveStorage::AnalyzeJob (Job ID: bb1f6d36-3ff1-483a-8894-73c88ec29598) from Inline(active_storage_analysis) in 3.86ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: bb1f6d36-3ff1-483a-8894-73c88ec29598) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011d3efd00 @uri=#<URI::GID gid://app/ActiveStorage::Blob/21>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("nickname", "titles", "comments", "pickup", "created_at", "updated_at", "likeCounts") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["nickname", "テスト7君"], ["titles", "テスト7"], ["comments", "テスト7だよ"], ["pickup", 0], ["created_at", "2022-12-25 14:23:19.568849"], ["updated_at", "2022-12-25 14:23:19.568849"], ["likeCounts", 19]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 17], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 17], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "21pg25botfmzix0yqmdzaco2voyz"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.573123"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "images"], ["record_type", "Post"], ["record_id", 17], ["blob_id", 22], ["created_at", "2022-12-25 14:23:19.574146"]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.574828"], ["id", 17]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: 21pg25botfmzix0yqmdzaco2voyz (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 22], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dcec5153-09df-4f5f-b913-51bf9bc81a12] Performing ActiveStorage::AnalyzeJob (Job ID: dcec5153-09df-4f5f-b913-51bf9bc81a12) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000011c5117e8 @uri=#<URI::GID gid://app/ActiveStorage::Blob/22>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dcec5153-09df-4f5f-b913-51bf9bc81a12] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: 21pg25botfmzix0yqmdzaco2voyz[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dcec5153-09df-4f5f-b913-51bf9bc81a12] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dcec5153-09df-4f5f-b913-51bf9bc81a12]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dcec5153-09df-4f5f-b913-51bf9bc81a12]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 22]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dcec5153-09df-4f5f-b913-51bf9bc81a12]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [dcec5153-09df-4f5f-b913-51bf9bc81a12] Performed ActiveStorage::AnalyzeJob (Job ID: dcec5153-09df-4f5f-b913-51bf9bc81a12) from Inline(active_storage_analysis) in 3.9ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: dcec5153-09df-4f5f-b913-51bf9bc81a12) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011c4c3368 @uri=#<URI::GID gid://app/ActiveStorage::Blob/22>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (0.2ms)[0m  [1m[32mINSERT INTO "events" ("eventname", "contents", "term", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["eventname", "テストイベント7"], ["contents", "テスト7です"], ["term", "2022-12-26"], ["created_at", "2022-12-25 14:23:19.581947"], ["updated_at", "2022-12-25 14:23:19.581947"]]
+  [1m[35m (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTag Load (0.0ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ7"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ7"], ["LIMIT", 1]]
+  [1m[36mTag Create (0.2ms)[0m  [1m[32mINSERT INTO "tags" ("tagname", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["tagname", "タグ7"], ["created_at", "2022-12-25 14:23:19.585907"], ["updated_at", "2022-12-25 14:23:19.585907"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? AND "tags"."id" != ? LIMIT ?[0m  [["tagname", "タグ7"], ["id", 10], ["LIMIT", 1]]
+  [1m[36mTag Update (0.2ms)[0m  [1m[33mUPDATE "tags" SET "updated_at" = ?, "event_id" = ? WHERE "tags"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.588859"], ["event_id", 7], ["id", 10]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 7], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 7], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "2ja1mvz79totjj6gd1zjob7d5au3"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.593066"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "image"], ["record_type", "Event"], ["record_id", 7], ["blob_id", 23], ["created_at", "2022-12-25 14:23:19.594215"]]
+  [1m[36mEvent Update (0.0ms)[0m  [1m[33mUPDATE "events" SET "updated_at" = ? WHERE "events"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.594961"], ["id", 7]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.6ms) [0m[32mUploaded file to key: 2ja1mvz79totjj6gd1zjob7d5au3 (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 23], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [04feb2f9-8686-407d-bf55-8de3ba0bf4dd] Performing ActiveStorage::AnalyzeJob (Job ID: 04feb2f9-8686-407d-bf55-8de3ba0bf4dd) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000011d1bb408 @uri=#<URI::GID gid://app/ActiveStorage::Blob/23>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [04feb2f9-8686-407d-bf55-8de3ba0bf4dd] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: 2ja1mvz79totjj6gd1zjob7d5au3[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [04feb2f9-8686-407d-bf55-8de3ba0bf4dd] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [04feb2f9-8686-407d-bf55-8de3ba0bf4dd]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [04feb2f9-8686-407d-bf55-8de3ba0bf4dd]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 23]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [04feb2f9-8686-407d-bf55-8de3ba0bf4dd]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [04feb2f9-8686-407d-bf55-8de3ba0bf4dd] Performed ActiveStorage::AnalyzeJob (Job ID: 04feb2f9-8686-407d-bf55-8de3ba0bf4dd) from Inline(active_storage_analysis) in 4.02ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 04feb2f9-8686-407d-bf55-8de3ba0bf4dd) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011d148688 @uri=#<URI::GID gid://app/ActiveStorage::Blob/23>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("nickname", "titles", "comments", "pickup", "created_at", "updated_at", "likeCounts") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["nickname", "テスト8君"], ["titles", "テスト8"], ["comments", "テスト8だよ"], ["pickup", 0], ["created_at", "2022-12-25 14:23:19.602598"], ["updated_at", "2022-12-25 14:23:19.602598"], ["likeCounts", 96]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 18], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 18], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "u05np5byqdxiup3tf7nhowvx198b"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.607384"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "images"], ["record_type", "Post"], ["record_id", 18], ["blob_id", 24], ["created_at", "2022-12-25 14:23:19.608461"]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.609166"], ["id", 18]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.9ms) [0m[32mUploaded file to key: u05np5byqdxiup3tf7nhowvx198b (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 24], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [562752b4-ca6e-4b9f-a853-80ae9389a530] Performing ActiveStorage::AnalyzeJob (Job ID: 562752b4-ca6e-4b9f-a853-80ae9389a530) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000011cabe268 @uri=#<URI::GID gid://app/ActiveStorage::Blob/24>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [562752b4-ca6e-4b9f-a853-80ae9389a530] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: u05np5byqdxiup3tf7nhowvx198b[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [562752b4-ca6e-4b9f-a853-80ae9389a530] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [562752b4-ca6e-4b9f-a853-80ae9389a530]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [562752b4-ca6e-4b9f-a853-80ae9389a530]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 24]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [562752b4-ca6e-4b9f-a853-80ae9389a530]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [562752b4-ca6e-4b9f-a853-80ae9389a530] Performed ActiveStorage::AnalyzeJob (Job ID: 562752b4-ca6e-4b9f-a853-80ae9389a530) from Inline(active_storage_analysis) in 4.25ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 562752b4-ca6e-4b9f-a853-80ae9389a530) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011c994090 @uri=#<URI::GID gid://app/ActiveStorage::Blob/24>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (0.2ms)[0m  [1m[32mINSERT INTO "events" ("eventname", "contents", "term", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["eventname", "テストイベント8"], ["contents", "テスト8です"], ["term", "2022-12-26"], ["created_at", "2022-12-25 14:23:19.617568"], ["updated_at", "2022-12-25 14:23:19.617568"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTag Load (0.0ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ8"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ8"], ["LIMIT", 1]]
+  [1m[36mTag Create (0.2ms)[0m  [1m[32mINSERT INTO "tags" ("tagname", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["tagname", "タグ8"], ["created_at", "2022-12-25 14:23:19.621391"], ["updated_at", "2022-12-25 14:23:19.621391"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? AND "tags"."id" != ? LIMIT ?[0m  [["tagname", "タグ8"], ["id", 11], ["LIMIT", 1]]
+  [1m[36mTag Update (0.2ms)[0m  [1m[33mUPDATE "tags" SET "updated_at" = ?, "event_id" = ? WHERE "tags"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.624449"], ["event_id", 8], ["id", 11]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 8], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 8], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "jkcqp7uwnng4turuamuefqrtyy4l"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.628787"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "image"], ["record_type", "Event"], ["record_id", 8], ["blob_id", 25], ["created_at", "2022-12-25 14:23:19.629837"]]
+  [1m[36mEvent Update (0.0ms)[0m  [1m[33mUPDATE "events" SET "updated_at" = ? WHERE "events"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.630552"], ["id", 8]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: jkcqp7uwnng4turuamuefqrtyy4l (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 25], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [0594d073-fb4d-4331-b7bc-471da89b41d9] Performing ActiveStorage::AnalyzeJob (Job ID: 0594d073-fb4d-4331-b7bc-471da89b41d9) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000012b5ec9d8 @uri=#<URI::GID gid://app/ActiveStorage::Blob/25>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [0594d073-fb4d-4331-b7bc-471da89b41d9] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: jkcqp7uwnng4turuamuefqrtyy4l[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [0594d073-fb4d-4331-b7bc-471da89b41d9] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [0594d073-fb4d-4331-b7bc-471da89b41d9]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [0594d073-fb4d-4331-b7bc-471da89b41d9]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 25]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [0594d073-fb4d-4331-b7bc-471da89b41d9]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [0594d073-fb4d-4331-b7bc-471da89b41d9] Performed ActiveStorage::AnalyzeJob (Job ID: 0594d073-fb4d-4331-b7bc-471da89b41d9) from Inline(active_storage_analysis) in 4.22ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 0594d073-fb4d-4331-b7bc-471da89b41d9) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000012b447650 @uri=#<URI::GID gid://app/ActiveStorage::Blob/25>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("nickname", "titles", "comments", "pickup", "created_at", "updated_at", "likeCounts") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["nickname", "テスト9君"], ["titles", "テスト9"], ["comments", "テスト9だよ"], ["pickup", 0], ["created_at", "2022-12-25 14:23:19.638336"], ["updated_at", "2022-12-25 14:23:19.638336"], ["likeCounts", 99]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 19], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 19], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "e43ye50e8hwk5bvja756st9hg2ak"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.644337"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "images"], ["record_type", "Post"], ["record_id", 19], ["blob_id", 26], ["created_at", "2022-12-25 14:23:19.645424"]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.646121"], ["id", 19]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: e43ye50e8hwk5bvja756st9hg2ak (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 26], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [aee63b00-589a-45d7-a441-2fc6dfc700b0] Performing ActiveStorage::AnalyzeJob (Job ID: aee63b00-589a-45d7-a441-2fc6dfc700b0) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000012a730890 @uri=#<URI::GID gid://app/ActiveStorage::Blob/26>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [aee63b00-589a-45d7-a441-2fc6dfc700b0] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: e43ye50e8hwk5bvja756st9hg2ak[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [aee63b00-589a-45d7-a441-2fc6dfc700b0] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [aee63b00-589a-45d7-a441-2fc6dfc700b0]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [aee63b00-589a-45d7-a441-2fc6dfc700b0]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 26]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [aee63b00-589a-45d7-a441-2fc6dfc700b0]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [aee63b00-589a-45d7-a441-2fc6dfc700b0] Performed ActiveStorage::AnalyzeJob (Job ID: aee63b00-589a-45d7-a441-2fc6dfc700b0) from Inline(active_storage_analysis) in 4.3ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: aee63b00-589a-45d7-a441-2fc6dfc700b0) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000012a6b3e30 @uri=#<URI::GID gid://app/ActiveStorage::Blob/26>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (0.3ms)[0m  [1m[32mINSERT INTO "events" ("eventname", "contents", "term", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["eventname", "テストイベント9"], ["contents", "テスト9です"], ["term", "2022-12-26"], ["created_at", "2022-12-25 14:23:19.654029"], ["updated_at", "2022-12-25 14:23:19.654029"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTag Load (0.1ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ9"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ9"], ["LIMIT", 1]]
+  [1m[36mTag Create (0.2ms)[0m  [1m[32mINSERT INTO "tags" ("tagname", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["tagname", "タグ9"], ["created_at", "2022-12-25 14:23:19.660027"], ["updated_at", "2022-12-25 14:23:19.660027"]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? AND "tags"."id" != ? LIMIT ?[0m  [["tagname", "タグ9"], ["id", 12], ["LIMIT", 1]]
+  [1m[36mTag Update (0.2ms)[0m  [1m[33mUPDATE "tags" SET "updated_at" = ?, "event_id" = ? WHERE "tags"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.662972"], ["event_id", 9], ["id", 12]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 9], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 9], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (7.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "hkw9kfxr0nao4n4y6mhas80kcr3j"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.667265"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "image"], ["record_type", "Event"], ["record_id", 9], ["blob_id", 27], ["created_at", "2022-12-25 14:23:19.675294"]]
+  [1m[36mEvent Update (0.0ms)[0m  [1m[33mUPDATE "events" SET "updated_at" = ? WHERE "events"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.676047"], ["id", 9]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.6ms) [0m[32mUploaded file to key: hkw9kfxr0nao4n4y6mhas80kcr3j (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 27], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [eba1bfde-9ed2-4089-87db-459a34eb7800] Performing ActiveStorage::AnalyzeJob (Job ID: eba1bfde-9ed2-4089-87db-459a34eb7800) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000012a3adc68 @uri=#<URI::GID gid://app/ActiveStorage::Blob/27>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [eba1bfde-9ed2-4089-87db-459a34eb7800] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: hkw9kfxr0nao4n4y6mhas80kcr3j[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [eba1bfde-9ed2-4089-87db-459a34eb7800] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [eba1bfde-9ed2-4089-87db-459a34eb7800]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [eba1bfde-9ed2-4089-87db-459a34eb7800]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 27]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [eba1bfde-9ed2-4089-87db-459a34eb7800]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [eba1bfde-9ed2-4089-87db-459a34eb7800] Performed ActiveStorage::AnalyzeJob (Job ID: eba1bfde-9ed2-4089-87db-459a34eb7800) from Inline(active_storage_analysis) in 4.24ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: eba1bfde-9ed2-4089-87db-459a34eb7800) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011d9852d8 @uri=#<URI::GID gid://app/ActiveStorage::Blob/27>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("nickname", "titles", "comments", "pickup", "created_at", "updated_at", "likeCounts") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["nickname", "テスト10君"], ["titles", "テスト10"], ["comments", "テスト10だよ"], ["pickup", 0], ["created_at", "2022-12-25 14:23:19.683901"], ["updated_at", "2022-12-25 14:23:19.683901"], ["likeCounts", 60]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 20], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 20], ["record_type", "Post"], ["name", "images"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "8rucvy8dtcydplavmzcltvksxio3"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.688724"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "images"], ["record_type", "Post"], ["record_id", 20], ["blob_id", 28], ["created_at", "2022-12-25 14:23:19.689798"]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.690518"], ["id", 20]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.6ms) [0m[32mUploaded file to key: 8rucvy8dtcydplavmzcltvksxio3 (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 28], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [736c06ec-dfc0-43c0-8adf-f3e51d195aab] Performing ActiveStorage::AnalyzeJob (Job ID: 736c06ec-dfc0-43c0-8adf-f3e51d195aab) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000011c5411f0 @uri=#<URI::GID gid://app/ActiveStorage::Blob/28>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [736c06ec-dfc0-43c0-8adf-f3e51d195aab] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: 8rucvy8dtcydplavmzcltvksxio3[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [736c06ec-dfc0-43c0-8adf-f3e51d195aab] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [736c06ec-dfc0-43c0-8adf-f3e51d195aab]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [736c06ec-dfc0-43c0-8adf-f3e51d195aab]   [1m[36mActiveStorage::Blob Update (0.3ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 28]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [736c06ec-dfc0-43c0-8adf-f3e51d195aab]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [736c06ec-dfc0-43c0-8adf-f3e51d195aab] Performed ActiveStorage::AnalyzeJob (Job ID: 736c06ec-dfc0-43c0-8adf-f3e51d195aab) from Inline(active_storage_analysis) in 4.1ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 736c06ec-dfc0-43c0-8adf-f3e51d195aab) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011c4d21d8 @uri=#<URI::GID gid://app/ActiveStorage::Blob/28>>
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (0.2ms)[0m  [1m[32mINSERT INTO "events" ("eventname", "contents", "term", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["eventname", "テストイベント10"], ["contents", "テスト10です"], ["term", "2022-12-26"], ["created_at", "2022-12-25 14:23:19.698188"], ["updated_at", "2022-12-25 14:23:19.698188"]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTag Load (0.1ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ10"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? LIMIT ?[0m  [["tagname", "タグ10"], ["LIMIT", 1]]
+  [1m[36mTag Create (0.2ms)[0m  [1m[32mINSERT INTO "tags" ("tagname", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["tagname", "タグ10"], ["created_at", "2022-12-25 14:23:19.702067"], ["updated_at", "2022-12-25 14:23:19.702067"]]
+  [1m[35m (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTag Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tags" WHERE "tags"."tagname" = ? AND "tags"."id" != ? LIMIT ?[0m  [["tagname", "タグ10"], ["id", 13], ["LIMIT", 1]]
+  [1m[36mTag Update (0.2ms)[0m  [1m[33mUPDATE "tags" SET "updated_at" = ?, "event_id" = ? WHERE "tags"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.705005"], ["event_id", 10], ["id", 13]]
+  [1m[35m (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 10], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 10], ["record_type", "Event"], ["name", "image"], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Create (0.2ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "yhqowl8xjakq7wvyjixda3pcgc4p"], ["filename", "test.png"], ["content_type", "image/png"], ["metadata", "{\"identified\":true}"], ["byte_size", 5930], ["checksum", "Y/nR/Abaz5W2lbt9qDsNPw=="], ["created_at", "2022-12-25 14:23:19.709384"]]
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "image"], ["record_type", "Event"], ["record_id", 10], ["blob_id", 29], ["created_at", "2022-12-25 14:23:19.710441"]]
+  [1m[36mEvent Update (0.0ms)[0m  [1m[33mUPDATE "events" SET "updated_at" = ? WHERE "events"."id" = ?[0m  [["updated_at", "2022-12-25 14:23:19.711184"], ["id", 10]]
+  [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: yhqowl8xjakq7wvyjixda3pcgc4p (checksum: Y/nR/Abaz5W2lbt9qDsNPw==)[0m
+[ActiveJob]   [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 29], ["LIMIT", 1]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b4dc2b33-21ba-4710-bf97-88eae3aab761] Performing ActiveStorage::AnalyzeJob (Job ID: b4dc2b33-21ba-4710-bf97-88eae3aab761) from Inline(active_storage_analysis) enqueued at 2022-12-25T14:23:19Z with arguments: #<GlobalID:0x000000011c37b578 @uri=#<URI::GID gid://app/ActiveStorage::Blob/29>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b4dc2b33-21ba-4710-bf97-88eae3aab761] [36m  Disk Storage (0.1ms) [0m[34mDownloaded file from key: yhqowl8xjakq7wvyjixda3pcgc4p[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b4dc2b33-21ba-4710-bf97-88eae3aab761] Skipping image analysis because the mini_magick gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b4dc2b33-21ba-4710-bf97-88eae3aab761]   [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b4dc2b33-21ba-4710-bf97-88eae3aab761]   [1m[36mActiveStorage::Blob Update (0.2ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?[0m  [["metadata", "{\"identified\":true,\"analyzed\":true}"], ["id", 29]]
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b4dc2b33-21ba-4710-bf97-88eae3aab761]   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [b4dc2b33-21ba-4710-bf97-88eae3aab761] Performed ActiveStorage::AnalyzeJob (Job ID: b4dc2b33-21ba-4710-bf97-88eae3aab761) from Inline(active_storage_analysis) in 4.0ms
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: b4dc2b33-21ba-4710-bf97-88eae3aab761) to Inline(active_storage_analysis) with arguments: #<GlobalID:0x000000011d170638 @uri=#<URI::GID gid://app/ActiveStorage::Blob/29>>
+Started GET "/" for ::1 at 2022-12-25 23:23:27 +0900
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /Users/chaco/.rbenv/versions/2.7.6/lib/ruby/gems/2.7.0/gems/railties-6.0.6/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /Users/chaco/.rbenv/versions/2.7.6/lib/ruby/gems/2.7.0/gems/railties-6.0.6/lib/rails/templates/rails/welcome/index.html.erb (Duration: 4.2ms | Allocations: 298)
+Completed 200 OK in 15ms (Views: 5.9ms | ActiveRecord: 0.0ms | Allocations: 2853)
+
+
